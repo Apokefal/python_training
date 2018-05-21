@@ -134,6 +134,7 @@ class test_add_user(unittest.TestCase):
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
     def Login(self, wd, username, password):
+        # Login
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
