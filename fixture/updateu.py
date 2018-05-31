@@ -1,4 +1,4 @@
-class UserHelper:
+class UpdateUser:
 
     def __init__(self, app):
         self.app = app
@@ -7,10 +7,10 @@ class UserHelper:
         wd = self.app.wd
         wd.get("http://localhost/addressbook/")
 
-    def Add_user(self, Data):
+    def Edit_user(self, Data):
         wd = self.app.wd
-        # init user creation
-        wd.find_element_by_link_text("add new").click()
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//img[@alt='Edit']").click()
         # Firstname
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -98,19 +98,8 @@ class UserHelper:
         wd.find_element_by_name("notes").clear()
         wd.find_element_by_name("notes").send_keys(Data.notes)
         # Submit group creation
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        self.Return_home_page()
-
-    def delete_fisrt_user(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
-        wd.switch_to_alert().accept()
-        self.Open_home_page()
+        wd.find_element_by_name("update").click()
 
     def Return_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
-
-
-
