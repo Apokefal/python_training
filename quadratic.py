@@ -18,6 +18,5 @@ def solve(a, b, c):
 
 
 
-solve(2, 34, 4)
+solve(1, 0, 1)
 solve(5, 64, 7)
-solve(8, 94, 10)
