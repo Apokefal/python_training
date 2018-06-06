@@ -12,6 +12,12 @@ class Application:
         self.group = GroupHelper(self)
         self.user = UserHelper(self)
 
+    def is_valid(self):
+        try:
+            self.wd.current_url
+            return True
+        except:
+            return False
 
     def Open_home_page(self):
         wd = self.wd
