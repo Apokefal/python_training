@@ -53,15 +53,19 @@ class UserHelper:
 
     def Edit_user(self, new_user_data):
         wd = self.app.wd
-        self.select_first_user()
+        self.select_first()
         wd.find_element_by_xpath("//img[@alt='Edit']").click()
         self.fill_user_form(new_user_data)
         # Submit group creation
         wd.find_element_by_name("update").click()
 
-    def delete_first_user(self):
+    def select_first(self):
         wd = self.app.wd
         wd.find_element_by_name("selected[]").click()
+
+    def delete_first_user(self):
+        wd = self.app.wd
+        self.select_first()
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.Open_home_page()
