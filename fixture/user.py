@@ -4,7 +4,8 @@ class UserHelper:
 
     def Open_home_page(self):
         wd = self.app.wd
-        wd.get("http://localhost/addressbook/")
+        if not (wd.current_url.endswith("/") and len(wd.find_elements_by_name("searchform")) > 0):
+            wd.get("http://localhost/addressbook/")
 
     def Add_user(self, user):
         wd = self.app.wd
