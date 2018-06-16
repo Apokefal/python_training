@@ -1,3 +1,5 @@
+from model.Data import UsFo
+
 class UserHelper:
     def __init__(self, app):
         self.app = app
@@ -79,5 +81,15 @@ class UserHelper:
         wd = self.app.wd
         self.Open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_user_list(self):
+        wd = self.app.wd
+        self.Open_home_page()
+        users = []
+        for element in wd.find_elements_by_name("entry"):
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            lastname = element.find.element_by_xpath(".//td[2]").text
+            users.append(UsFo(lastname=lastname, id=id))
+        return users
 
 
