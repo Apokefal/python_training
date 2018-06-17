@@ -16,6 +16,7 @@ class UserHelper:
         self.fill_user_form(user)
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.Return_home_page()
+        self.user_cache = None
 
     def fill_user_form(self, user):
         wd = self.app.wd
@@ -62,6 +63,7 @@ class UserHelper:
         self.fill_user_form(new_user_data)
         # Submit group creation
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def select_first(self):
         wd = self.app.wd
@@ -73,6 +75,7 @@ class UserHelper:
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.Open_home_page()
+        self.user_cache = None
 
     def Return_home_page(self):
         wd = self.app.wd
@@ -83,15 +86,18 @@ class UserHelper:
         self.Open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    user_cache = None
+
     def get_user_list(self):
+        if self.user_cache is None:
         wd = self.app.wd
         self.Open_home_page()
-        users = []
+        self.user_cache = []
         for element in wd.find_elements_by_name("entry"):
             lastname = element.find_element_by_xpath(".//td[2]").text
             firstname = element.find_element_by_xpath(".//td[3]").text
             id = element.find_element_by_name("selected[]").get_attribute("value")
-            users.append(UsFo(lastname=lastname, id=id, firstname=firstname))
-        return users
+            self.user_cache.append(UsFo(lastname=lastname, id=id, firstname=firstname))
+        return list(self.user_cache)
 
 

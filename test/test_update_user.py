@@ -8,7 +8,7 @@ def test_update_user(app):
     user = UsFo(firstname="W", lastname="A")
     user.id = old_users[0].id
     app.user.Edit_user(user)
+    assert len(old_users) == app.user.counts()
     new_users = app.user.get_user_list()
-    assert len(old_users) == len(new_users)
     old_users[0] = user
     assert sorted(old_users, key=UsFo.id_or_max) == sorted(new_users, key=UsFo.id_or_max)
