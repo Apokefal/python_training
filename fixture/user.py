@@ -1,3 +1,4 @@
+#
 from model.Data import UsFo
 
 class UserHelper:
@@ -87,10 +88,10 @@ class UserHelper:
         self.Open_home_page()
         users = []
         for element in wd.find_elements_by_name("entry"):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
             lastname = element.find_element_by_xpath(".//td[2]").text
-            users.append(UsFo(lastname=lastname, id=id))
+            firstname = element.find_element_by_xpath(".//td[3]").text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            users.append(UsFo(lastname=lastname, id=id, firstname=firstname))
         return users
 
 

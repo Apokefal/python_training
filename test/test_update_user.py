@@ -1,9 +1,14 @@
+#
 from model.Data import UsFo
 
 def test_update_user(app):
     if app.user.counts() == 0:
         app.user.Add_user(UsFo(firstname="W"))
     old_users = app.user.get_user_list()
-    app.user.Edit_user(UsFo(firstname="W", middlename="A", company="L", address="E", home="R", mobile="K", work="O"))
+    user = UsFo(firstname="W", lastname="A")
+    user.id = old_users[0].id
+    app.user.Edit_user(user)
     new_users = app.user.get_user_list()
     assert len(old_users) == len(new_users)
+    old_users[0] = user
+    assert sorted(old_users, key=UsFo.id_or_max) == sorted(new_users, key=UsFo.id_or_max)
