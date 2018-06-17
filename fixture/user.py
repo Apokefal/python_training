@@ -87,8 +87,9 @@ class UserHelper:
         self.Open_home_page()
         users = []
         for element in wd.find_elements_by_name("entry"):
+            text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
-            lastname = element.find.element_by_xpath(".//td[2]").text
+            lastname = element.find_element_by_xpath(".//td[2]").text
             users.append(UsFo(lastname=lastname, id=id))
         return users
 
