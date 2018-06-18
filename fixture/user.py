@@ -56,22 +56,32 @@ class UserHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def Edit_user(self, new_user_data):
+    def select_first(self):
+        self.select_user_by_index()
+
+    def select_user_by_index(self, index):
         wd = self.app.wd
-        self.select_first()
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        wd.find_elements_by_name("selected[]")[index].click()
+
+    def Edit_user(self):
+        self.Edit_user_by_index(0)
+
+
+    def Edit_user_by_index(self, index, new_user_data):
+        wd = self.app.wd
+        self.select_user_by_index(index)
+        wd.find_elements_by_xpath("//a[contains(@href,'edit.php?id=')]")[index].click()
         self.fill_user_form(new_user_data)
         # Submit group creation
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
-    def select_first(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-
     def delete_first_user(self):
+        self.delete_user_by_index(0)
+
+    def delete_user_by_index(self, index):
         wd = self.app.wd
-        self.select_first()
+        self.select_user_by_index(index)
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.Open_home_page()
