@@ -1,4 +1,4 @@
-#
+##
 from model.Data import UsFo
 
 class UserHelper:
@@ -90,14 +90,14 @@ class UserHelper:
 
     def get_user_list(self):
         if self.user_cache is None:
-        wd = self.app.wd
-        self.Open_home_page()
-        self.user_cache = []
-        for element in wd.find_elements_by_name("entry"):
-            lastname = element.find_element_by_xpath(".//td[2]").text
-            firstname = element.find_element_by_xpath(".//td[3]").text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            self.user_cache.append(UsFo(lastname=lastname, id=id, firstname=firstname))
+            wd = self.app.wd
+            self.Open_home_page()
+            self.user_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                lastname = element.find_element_by_xpath(".//td[2]").text
+                firstname = element.find_element_by_xpath(".//td[3]").text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.user_cache.append(UsFo(lastname=lastname, id=id, firstname=firstname))
         return list(self.user_cache)
 
 
