@@ -21,33 +21,11 @@ class UserHelper:
     def fill_user_form(self, user):
         wd = self.app.wd
         self.change_field_value("firstname", user.firstname)
-        self.change_field_value("middlename", user.middlename)
         self.change_field_value("lastname", user.lastname)
-        self.change_field_value("nickname", user.nickname)
-        self.change_field_value("title", user.title)
-        self.change_field_value("company", user.company)
-        self.change_field_value("address", user.address)
-        self.change_field_value("home", user.home)
-        self.change_field_value("mobile", user.mobile)
-        self.change_field_value("work", user.work)
-        self.change_field_value("fax", user.fax)
-        self.change_field_value("email", user.email)
-        self.change_field_value("email2", user.email2)
-        self.change_field_value("email3", user.email3)
-        self.change_field_value("homepage", user.homepage)
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[3]").click()
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[4]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[4]").click()
-        self.change_field_value("byear", user.yearbirt)
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[3]//option[4]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[3]//option[4]").click()
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[4]//option[5]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[4]//option[5]").click()
-        self.change_field_value("ayear", user.yearanni)
-        self.change_field_value("address2", user.address2)
-        self.change_field_value("phone2", user.phone2)
-        self.change_field_value("notes", user.notes)
+        self.change_field_value("homephone", user.homephone)
+        self.change_field_value("mobilephone", user.mobilephone)
+        self.change_field_value("workphone", user.workphone)
+        self.change_field_value("secondaryphone", user.secondaryphone)
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -103,11 +81,41 @@ class UserHelper:
             wd = self.app.wd
             self.Open_home_page()
             self.user_cache = []
-            for element in wd.find_elements_by_name("entry"):
-                lastname = element.find_element_by_xpath(".//td[2]").text
-                firstname = element.find_element_by_xpath(".//td[3]").text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.user_cache.append(UsFo(lastname=lastname, id=id, firstname=firstname))
+            for row in wd.find_elements_by_name("entry"):
+                cells = row.find_elements_by_tag_name("td")
+                firstname = cells[1].text
+                lastname = cells[2].text
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                all_phones = cells[5].text.splitlines()
+                self.user_cache.append(UsFo(firstname=firstname, lastname=lastname, id=id,
+                                            homephone=all_phones[0], mobilephone=all_phones[1],
+                                            workphone=all_phones[2], secondaryphone=all_phones[3]))
         return list(self.user_cache)
 
+    def open_user_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.app.Open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
 
+    def open_user_view_by_index(self, index):
+        wd = self.app.wd
+        self.app.Open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
+
+    def get_user_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_user_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        return UsFo(firstname=firstname, lastname=lastname, id=id,
+                    homephone=homephone, mobilephone=mobilephone,
+                    workphone=workphone, secondaryphone=secondaryphone)

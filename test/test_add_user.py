@@ -3,7 +3,7 @@ from model.Data import UsFo
     
 def test_test_add_user(app):
     old_users = app.user.get_user_list()
-    user = UsFo(firstname="при2вет", middlename="при123вет", lastname="привrwtrtет")
+    user = UsFo(firstname="при2вет", lastname="привrwtrtет")
     app.user.Add_user(user)
     assert len(old_users) + 1 == app.user.counts()
     new_users = app.user.get_user_list()
@@ -13,7 +13,7 @@ def test_test_add_user(app):
 
 def test_test_add_empty_user(app):
     old_users = app.user.get_user_list()
-    user = UsFo(firstname="при2вет", middlename="при123вет", lastname="привrwtrtет")
+    user = UsFo(firstname="при2вет", lastname="привrwtrtет")
     app.user.Add_user(user)
     assert len(old_users) + 1 == app.user.counts()
     new_users = app.user.get_user_list()
