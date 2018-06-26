@@ -3,8 +3,7 @@ from model.Data import UsFo
     
 def test_test_add_user(app):
     old_users = app.user.get_user_list()
-    user = UsFo(firstname="при2вет", lastname="привrwtrtет", id="1", address="adres",
-                homephone="89609451", workphone="435345435", mobilephone="64651651651", secondaryphone="3243243243", email="sdkjfbhd@ekjf.ru")
+    user = UsFo(firstname="при2вет", lastname="привrwtrtет", id="1", homephone="89609451", workphone="435345435", mobilephone="64651651651", secondaryphone="3243243243")
     app.user.Add_user(user)
     app.user.Open_home_page()
     assert len(old_users) + 1 == app.user.counts()

@@ -1,5 +1,6 @@
-#
+###
 from model.Data import UsFo
+import re
 
 class UserHelper:
     def __init__(self, app):
@@ -22,12 +23,10 @@ class UserHelper:
         wd = self.app.wd
         self.change_field_value("firstname", user.firstname)
         self.change_field_value("lastname", user.lastname)
-        self.change_field_value("address", user.address)
-        self.change_field_value("home", user.home)
-        self.change_field_value("mobile", user.mobile)
-        self.change_field_value("work", user.work)
-        self.change_field_value("email", user.email)
-        self.change_field_value("phone2", user.phone2)
+        self.change_field_value("homephone", user.homephone)
+        self.change_field_value("mobilephone", user.mobilephone)
+        self.change_field_value("workphone", user.workphone)
+        self.change_field_value("secondaryphone", user.secondaryphone)
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -46,11 +45,12 @@ class UserHelper:
     def Edit_user(self):
         self.Edit_user_by_index(0)
 
-    def Edit_user_by_index(self, index, user):
+
+    def Edit_user_by_index(self, index, new_user_data):
         wd = self.app.wd
         self.select_user_by_index(index)
         wd.find_elements_by_xpath("//a[contains(@href,'edit.php?id=')]")[index].click()
-        self.fill_user_form(user)
+        self.fill_user_form(new_user_data)
         # Submit group creation
         wd.find_element_by_name("update").click()
         self.user_cache = None
@@ -61,7 +61,7 @@ class UserHelper:
     def delete_user_by_index(self, index):
         wd = self.app.wd
         self.select_user_by_index(index)
-        wd.find_element_by_css_selector("input[value=Delete]").click()
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.Open_home_page()
         self.user_cache = None
@@ -80,15 +80,17 @@ class UserHelper:
     def get_user_list(self):
         if self.user_cache is None:
             wd = self.app.wd
-            self.app.Open_home_page()
+            self.Open_home_page()
             self.user_cache = []
             for row in wd.find_elements_by_name("entry"):
                 cells = row.find_elements_by_tag_name("td")
                 firstname = cells[1].text
                 lastname = cells[2].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = cells[5].text
-                self.user_cache.append(UsFo(lastname=lastname, id=id, firstname=firstname, homephone=all_phones[0], mobilephone=all_phones[1], workphone=all_phones[2], secondaryphone=all_phones[3]))
+                all_phones = cells[5].text.splitlines()
+                self.user_cache.append(UsFo(firstname=firstname, lastname=lastname, id=id,
+                                            homephone=all_phones[0], mobilephone=all_phones[1],
+                                            workphone=all_phones[2], secondaryphone=all_phones[3]))
         return list(self.user_cache)
 
     def open_user_to_edit_by_index(self, index):
@@ -115,8 +117,17 @@ class UserHelper:
         workphone = wd.find_element_by_name("work").get_attribute("value")
         mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
         secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
-        return UsFo(lastname=lastname, id=id, firstname=firstname,
-                    homephone=homephone, mobilephone=mobilephone, workphone=workphone, secondaryphone=secondaryphone)
+        return UsFo(firstname=firstname, lastname=lastname, id=id,
+                    homephone=homephone, mobilephone=mobilephone,
+                    workphone=workphone, secondaryphone=secondaryphone)
 
-
-
+    def get_user_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_user_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        workphone = re.search("W: (.*)", text).group(1)
+        mobilephone = re.search("M: (.*)", text).group(1)
+        secondaryphone = re.search("P: (.*)", text).group(1)
+        return UsFo(homephone=homephone, mobilephone=mobilephone,
+                    workphone=workphone, secondaryphone=secondaryphone)
