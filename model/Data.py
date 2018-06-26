@@ -25,13 +25,16 @@ class Group:
 
 
 class UsFo:
-    def __init__(self, firstname=None, lastname=None, homephone=None, mobilephone=None, workphone=None, secondaryphone=None, id=None):
-        self.firstname = firstname
-        self.lastname = lastname
-        self.homephone = homephone
-        self.mobilephone = mobilephone
-        self.workphone = workphone
-        self.secondaryphone = secondaryphone
+    def __init__(self, firstname=None, lastname=None, address=None, homephone=None, mobilephone=None,
+                 workphone=None, secondaryphone=None, email=None, id=None):
+        self.firstname=firstname
+        self.lastname=lastname
+        self.address=address
+        self.home=homephone
+        self.mobile=mobilephone
+        self.work=workphone
+        self.email=email
+        self.phone2=secondaryphone
         self.id = id
 
     def __repr__(self):

@@ -1,5 +1,3 @@
-
-
 def test_phones_on_home_page(app):
     user_from_home_page = app.user.get_user_list()[0]
     user_from_edit_page = app.user.get_user_info_from_edit_page(0)
