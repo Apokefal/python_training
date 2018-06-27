@@ -29,6 +29,8 @@ class UserHelper:
         self.change_field_value("work", user.workphone)
         self.change_field_value("phone2", user.secondaryphone)
         self.change_field_value("email", user.email)
+        self.change_field_value("email2", user.email2)
+        self.change_field_value("email3", user.email3)
 
 
     def change_field_value(self, field_name, text):
