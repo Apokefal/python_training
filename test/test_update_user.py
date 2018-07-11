@@ -13,6 +13,6 @@ def test_update_some_user(app, db, check_ui):
     user.id = random_user.id
     old_users.remove(random_user)
     old_users.append(user)
-    assert old_users == new_users
+    assert len(old_users) == len(new_users)
     if check_ui:
-        assert sorted(old_users, key=UsFo.id_or_max) == sorted(new_users, key=UsFo.id_or_max)
+        assert sorted(new_users, key=UsFo.id_or_max) == sorted(app.user.get_user_list(), key=UsFo.id_or_max)
