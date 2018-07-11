@@ -1,14 +1,15 @@
 ###
 from model.Data import UsFo
-from random import randrange
+import random
 
-def test_delete_user(app):
-    if app.user.counts() == 0:
+
+def test_delete_user(app, db):
+    if len(db.get_user_list()) == 0:
         app.user.Add_user(UsFo(firstname="test"))
-    old_users = app.user.get_user_list()
-    index = randrange(len(old_users))
-    app.user.delete_user_by_index(index)
+    old_users = db.get_user_list()
+    user = random.choice(old_users)
+    app.user.delete_user_by_id(user.id)
     assert len(old_users) - 1 == app.user.counts()
-    new_users = app.user.get_user_list()
-    old_users[index:index+1] = []
+    new_users = db.get_user_list()
+    old_users.remove(user)
     assert old_users == new_users

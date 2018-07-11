@@ -1,16 +1,18 @@
 ###
 from model.Data import UsFo
-from random import randrange
+import random
 
-def test_update_some_user(app):
-    if app.user.counts() == 0:
+def test_update_some_user(app, db, check_ui):
+    user = UsFo(firstname="test", lastname="test", id="1",address="test", homephone="test", mobilephone="test", workphone="test", secondaryphone="test", email="test@gmail.com")
+    if len(db.get_user_list()) == 0:
         app.user.Add_user(UsFo(firstname="W"))
-    old_users = app.user.get_user_list()
-    index = randrange(len(old_users))
-    user = UsFo(firstname="W", lastname="A")
-    user.id = old_users[index].id
-    app.user.Edit_user_by_index(index, user)
-    assert len(old_users) == app.user.counts()
-    new_users = app.user.get_user_list()
-    old_users[index] = user
-    assert sorted(old_users, key=UsFo.id_or_max) == sorted(new_users, key=UsFo.id_or_max)
+    old_users = db.get_user_list()
+    random_user = random.choice(old_users)
+    app.user.Edit_user_by_id(random_user.id, user)
+    new_users = db.get_user_list()
+    user.id = random_user.id
+    old_users.remove(random_user)
+    old_users.append(user)
+    assert old_users == new_users
+    if check_ui:
+        assert sorted(old_users, key=UsFo.id_or_max) == sorted(new_users, key=UsFo.id_or_max)

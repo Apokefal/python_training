@@ -47,14 +47,26 @@ class UserHelper:
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
 
+    def select_user_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
     def Edit_user(self):
         self.Edit_user_by_index(0)
-
 
     def Edit_user_by_index(self, index, new_user_data):
         wd = self.app.wd
         self.select_user_by_index(index)
         wd.find_elements_by_xpath("//a[contains(@href,'edit.php?id=')]")[index].click()
+        self.fill_user_form(new_user_data)
+        # Submit group creation
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
+
+    def Edit_user_by_id(self, id, new_user_data):
+        wd = self.app.wd
+        self.select_user_by_id(id)
+        wd.find_element_by_xpath("//a[contains(@href, %s) and contains(@href, 'edit.php?id=')]" % id).click()
         self.fill_user_form(new_user_data)
         # Submit group creation
         wd.find_element_by_name("update").click()
@@ -66,7 +78,15 @@ class UserHelper:
     def delete_user_by_index(self, index):
         wd = self.app.wd
         self.select_user_by_index(index)
-        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.find_element_by_css_selector("input[value=Delete]").click()
+        wd.switch_to_alert().accept()
+        self.Open_home_page()
+        self.user_cache = None
+
+    def delete_user_by_id(self, id):
+        wd = self.app.wd
+        self.select_user_by_id(id)
+        wd.find_element_by_css_selector("input[value=Delete]").click()
         wd.switch_to_alert().accept()
         self.Open_home_page()
         self.user_cache = None

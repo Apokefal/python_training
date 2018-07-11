@@ -1,6 +1,6 @@
 import pymysql.cursors
 from model.Data import Group
-
+from model.Data import UsFo
 
 class DbFixture:
 
@@ -24,6 +24,24 @@ class DbFixture:
         finally:
             cursor.close()
         return list
+
+    def get_user_list(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select id, firstname, lastname, address, email, home, mobile, work, phone2 \
+                           from addressbook where deprecated='0000-00-00 00:00:00'")
+            for row in cursor:
+                (id, firstname, lastname, address, email, homephone, mobilephone, workphone, secondaryphone) = row
+                list.append(
+                    UsFo(id=str(id), firstname=firstname, lastname=lastname,
+                         address=address,  email=email,
+                         homephone=homephone, mobilephone=mobilephone, workphone=workphone, secondaryphone=secondaryphone,
+                         all_emails_from_home_page=None, all_phones_from_home_page=None))
+        finally:
+            cursor.close()
+        return list
+
 
     def destroy(self):
         self.connection.close()
