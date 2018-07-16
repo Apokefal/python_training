@@ -1,7 +1,7 @@
 import pymysql.cursors
 from model.Data import Group
 from model.Data import UsFo
-##
+###
 class DbFixture:
 
     def __init__(self, host, name, user, password):
