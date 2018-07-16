@@ -1,5 +1,4 @@
 #####
-from selenium.webdriver.support.ui import Select
 from model.Data import UsFo
 import re
 
@@ -163,3 +162,27 @@ class UserHelper:
         secondaryphone = re.search("P: (.*)", text).group(1)
         return UsFo(homephone=homephone, mobilephone=mobilephone,
                     workphone=workphone, secondaryphone=secondaryphone)
+
+    def add_to_group(self, group_id, user_id):
+        wd = self.app.wd
+        self.select_user_by_id(user_id)
+        self.select_group_in_dropdown(group_id)
+        wd.find_element_by_name("add").click()
+        self.app.Open_home_page()
+
+    def filter_for_group(self, id):
+        wd = self.app.wd
+        wd.find_element_by_name("group").click()
+        wd.find_element_by_xpath("//select[@name='group']//option[@value='%s']" % id).click()
+
+    def remove_from_group(self, group_id, user_id):
+        wd = self.app.wd
+        self.filter_for_group(group_id)
+        self.select_user_by_id(user_id)
+        wd.find_element_by_name("remove").click()
+
+    def select_group_in_dropdown(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//select[@name='to_group']//option[@value='%s']" % id).click()
+
+

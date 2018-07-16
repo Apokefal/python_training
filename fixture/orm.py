@@ -6,7 +6,6 @@ from model.Data import Group
 
 
 class ORMFixture:
-
     db = Database()
 
     class ORMGroup(db.Entity):
@@ -46,10 +45,6 @@ class ORMFixture:
             return Group(id=str(group.id), name=group.name, header=group.header, footer=group.footer)
         return list(map(convert, groups))
 
-    @db_session
-    def get_user_list(self):
-        return self.convert_users_to_model(select(c for c in ORMFixture.ORMUser if c.deprecated is None))
-
     def convert_users_to_model(self, users):
         def convert(user):
             return UsFo(id=str(user.id), firstname=user.firstname, lastname=user.lastname,
@@ -65,16 +60,15 @@ class ORMFixture:
 
     @db_session
     def get_user_list(self):
-        return self.convert_users_to_model(select(u for u in ORMFixture.ORMUser if u.deprecated is None))
+        return self.convert_users_to_model(select(c for c in ORMFixture.ORMUser if c.deprecated is None))
 
     @db_session
     def get_users_in_group(self, group):
         orm_group = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
-        return self.convert_users_to_model(
-            select(u for u in ORMFixture.ORMUser if u.deprecated is None and orm_group not in u.groups))
+        return self.convert_users_to_model(orm_group.users)
 
     @db_session
     def get_users_not_in_group(self, group):
         orm_group = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
         return self.convert_users_to_model(
-            select(u for u in ORMFixture.ORMUser if u.deprecated is None and orm_group not in u.groups))
+            select(c for c in ORMFixture.ORMUser if c.deprecated is None and orm_group not in c.groups))
