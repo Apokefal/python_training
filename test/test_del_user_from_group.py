@@ -19,15 +19,15 @@ def test_del_user_from_group(app, db):
     user_list = db.get_user_list()
     random_user = random.choice(user_list)
     if len(users_in_group) == 0:
-            app.user.add_to_group(contact_id=random_user.id, group_id=random_group.id)
-            app.user.remove_from_group(contact_id=random_user.id, group_id=random_group.id)
+            app.user.add_to_group(user_id=random_user.id, group_id=random_group.id)
+            app.user.remove_from_group(user_id=random_user.id, group_id=random_group.id)
             for user in users_in_group:
                 if user.id != random_user.id:
                     assert True
                     print(random_user)
     else:
         random_user_from_group = random.choice(users_in_group)
-        app.user.remove_from_group(contact_id=random_user_from_group.id, group_id=random_group.id)
+        app.user.remove_from_group(user_id=random_user_from_group.id, group_id=random_group.id)
         for user in users_in_group:
             if user.id != random_user_from_group.id:
                 assert True

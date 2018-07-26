@@ -30,7 +30,7 @@ class ORMFixture:
         workphone = Optional(str, column='work')
         secondaryphone = Optional(str, column='phone2')
         deprecated = Optional(str, column='deprecated')
-        groups = Set(lambda: ORMFixture.ORMGroup, table='address_in_groups', column='group_id', reverse='contacts', lazy=True)
+        groups = Set(lambda: ORMFixture.ORMGroup, table='address_in_groups', column='group_id', reverse='users', lazy=True)
 
     def __init__(self, host, name, user, password):
         conv = encoders
