@@ -26,7 +26,7 @@ class Group:
 
 class UsFo:
     def __init__(self, firstname=None, lastname=None, address=None, id=None,
-                 homephone=None, mobilephone=None, workphone=None, secondaryphone=None, all_phones_from_home_page=None,
+                 homephone=None, mobilephone=None, workphone=None, secondaryphone=None, company=None, all_phones_from_home_page=None,
                  email=None, email2=None, email3=None, all_emails_from_home_page=None):
         self.firstname = firstname
         self.lastname = lastname
@@ -34,6 +34,7 @@ class UsFo:
         self.homephone = homephone
         self.mobilephone = mobilephone
         self.workphone = workphone
+        self.company = company
         self.secondaryphone = secondaryphone
         self.email = email
         self.email2 = email2
